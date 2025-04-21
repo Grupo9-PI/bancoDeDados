@@ -1,5 +1,5 @@
-create database Grupo9;
-use Grupo9;
+create database Grupo9PI;
+use Grupo9PI;
 
 CREATE TABLE empresa(
 idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
@@ -76,7 +76,6 @@ insert into areaCultivo(qtOstras, dtinstalacao, fkUsuario) values
 ('280', '2018-10-01', 9),
 ('500', '2025-01-01', 9);
 
-drop table sensorLDR;
 CREATE TABLE sensorLDR(
 idSensor INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 numSerie VARCHAR(100) UNIQUE NOT NULL,
@@ -85,27 +84,26 @@ dtCompra DATE NOT NULL,
 statusManutencao VARCHAR(10) DEFAULT 'Inativo' NOT NULL,
 CONSTRAINT checkManutencao CHECK(statusManutencao IN("Ativo","Inativo","Manutencao")),
 dtManutencao DATE NOT NULL,
-dtInstalacao date not null,
 fkCultivo int,
 constraint fkCultivoSensor
 	foreign key (fkCultivo)
     references areaCultivo (idCultivo)
 );
 
-INSERT INTO sensorLDR (numSerie, dtFabricacao, dtCompra, dtManutencao, statusManutencao, dtInstalacao, fkCultivo)
+INSERT INTO sensorLDR (numSerie, dtFabricacao, dtCompra, dtManutencao, statusManutencao, fkCultivo)
 VALUES
-('9AKREG935G9', '2023-06-10', '2024-07-15', '2023-12-10', 'Ativo', '2024-07-20', 1),
-('SEF4290KF29', '2023-11-28', '2024-01-10', '2025-02-25', 'Inativo', '2024-01-15', 2),
-('ASDKF94K9F2', '2023-03-05', '2024-03-10', '2025-02-28', 'Inativo', '2024-03-12', 3),
-('SAF4290KF29', '2023-11-20', '2024-01-10', '2025-05-20', 'Inativo', '2024-01-13', 4),
-('XPT2048QW98', '2023-06-12', '2024-02-01', '2023-12-12', 'Manutenção', '2024-02-05', 5),
-('LKJ9321PLO3', '2022-09-20', '2023-11-05', '2023-03-20', 'Ativo', '2023-11-10', 6),
-('MNZ8543QAZX', '2024-01-01', '2024-04-15', '2024-07-01', 'Inativo', '2024-04-20', 7),
-('TRD0192XZJK', '2023-05-17', '2024-05-10', '2023-11-17', 'Ativo', '2024-05-12', 8),
-('QWE7584BNMA', '2022-12-10', '2023-10-25', '2023-06-10', 'Manutenção', '2023-10-30', 9),
-('GHY3847IKLP', '2023-07-08', '2024-06-01', '2024-01-08', 'Inativo', '2024-06-05', 10),
-('YUI5623ZXCV', '2023-10-25', '2024-08-15', '2024-04-25', 'Ativo', '2024-08-18', 11),
-('BNM2398VFRD', '2024-02-02', '2024-06-30', '2024-08-02', 'Inativo', '2024-07-02', 12);
+('9AKREG935G9', '2023-06-10', '2024-07-15', '2023-12-10', 'Ativo', 1),
+('SEF4290KF29', '2023-11-28', '2024-01-10', '2025-02-25', 'Inativo', 2),
+('ASDKF94K9F2', '2023-03-05', '2024-03-10', '2025-02-28', 'Inativo', 3),
+('SAF4290KF29', '2023-11-20', '2024-01-10', '2025-05-20', 'Inativo', 4),
+('XPT2048QW98', '2023-06-12', '2024-02-01', '2023-12-12', 'Manutenção', 5),
+('LKJ9321PLO3', '2022-09-20', '2023-11-05', '2023-03-20', 'Ativo', 6),
+('MNZ8543QAZX', '2024-01-01', '2024-04-15', '2024-07-01', 'Inativo', 7),
+('TRD0192XZJK', '2023-05-17', '2024-05-10', '2023-11-17', 'Ativo', 8),
+('QWE7584BNMA', '2022-12-10', '2023-10-25', '2023-06-10', 'Manutenção', 9),
+('GHY3847IKLP', '2023-07-08', '2024-06-01', '2024-01-08', 'Inativo', 10),
+('YUI5623ZXCV', '2023-10-25', '2024-08-15', '2024-04-25', 'Ativo', 11),
+('BNM2398VFRD', '2024-02-02', '2024-06-30', '2024-08-02', 'Inativo', 12);
 
 CREATE TABLE monitoramento(
     idSensorMonitoramento INT primary key auto_increment NOT NULL ,
@@ -138,9 +136,115 @@ INSERT INTO monitoramento (dtRegistro, iluminacao,fkSensor) VALUES
 ('2025-04-18 23:00:00', 215, 11),
 ('2025-04-19 00:00:00', 220, 12);
 
+insert into monitoramento (dtRegistro, iluminacao, fkSensor) values 
+('2025-04-24 00:00:00','2', 1),
+('2025-04-24 01:00:00','3', 1),
+('2025-04-24 02:00:00','2', 1),
+('2025-04-24 03:00:00','1', 1),
+('2025-04-24 04:00:00','1', 1),
+('2025-04-24 05:00:00','50', 1),
+('2025-04-24 05:30:00','100', 1),
+('2025-04-24 06:00:00','200', 1),
+('2025-04-24 06:30:00','250', 1),
+('2025-04-24 07:00:00','300', 1),
+('2025-04-24 07:30:00','350', 1),
+('2025-04-24 08:00:00','400', 1),
+('2025-04-24 08:30:00','550', 1),
+('2025-04-24 09:00:00','680', 1),
+('2025-04-24 09:30:00','700', 1),
+('2025-04-24 10:00:00','750', 1),
+('2025-04-24 10:30:00','800', 1),
+('2025-04-24 11:00:00','850', 1),
+('2025-04-24 11:30:00','910', 1),
+('2025-04-24 12:00:00','1000', 1),
+('2025-04-24 12:30:00','1090', 1),
+('2025-04-24 13:00:00','1120', 1),
+('2025-04-24 13:30:00','1080', 1),
+('2025-04-24 14:00:00','970', 1),
+('2025-04-24 14:30:00','900', 1),
+('2025-04-24 15:00:00','870', 1),
+('2025-04-24 15:30:00','800', 1),
+('2025-04-24 16:00:00','750', 1),
+('2025-04-24 16:30:00','620', 1),
+('2025-04-24 17:00:00','550', 1),
+('2025-04-24 17:30:00','400', 1),
+('2025-04-24 18:00:00','320', 1),
+('2025-04-24 18:30:00','280', 1),
+('2025-04-24 19:00:00','200', 1),
+('2025-04-24 19:30:00','50', 1),
+('2025-04-24 20:00:00','6', 1),
+('2025-04-24 21:00:00','5', 1),
+('2025-04-24 22:00:00','3', 1),
+('2025-04-24 23:00:00','2', 1);
+
+alter table sensorLDR add column proximaManutencao date;
+select * from sensorLDR;
+
+update sensorLDR set dtManutencao = '2025-01-01' where idSensor=1;
+update sensorLDR set dtManutencao ='2025-02-01' where idSensor in (2,3,4,5);
+update sensorLDR set dtManutencao= '2025-03-01' where idSensor in (6,7,8,9,10,11,12);
+
+update sensorLDR set proximaManutencao = '2025-06-01' where idSensor= 1;
+update sensorLDR set proximaManutencao = '2025-07-01' where idSensor in (2,3,4);
+update sensorLDR set proximaManutencao = null where idSensor= 5;
+update sensorLDR set proximaManutencao = '2025-08-01' where idSensor in (6,7,8,9,10,11,12);
+
 select *from empresa;
 select *from usuario;
 select *from areaCultivo;
 select *from monitoramento;
 select *from sensorLDR;
 
+
+-- Exibir Nome Empresa, Supervisor, Funcionário Responsável, Identificação do Cultivo, Quantidade de ostras, Identificação do Sensor, Data do Registro e valor LX.
+SELECT 
+    empresa.nomeFantasia AS 'Nome Empresa',
+    supervisor.nome AS 'Supervisor',
+    usuario.nome AS 'Funcionário Responsável',
+    areaCultivo.idCultivo AS 'Identificação do Cultivo',
+    areaCultivo.qtOstras AS 'Quantidade de ostras',
+    sensorLDR.idSensor AS 'Identificação do Sensor',
+    monitoramento.dtRegistro AS 'Data de registro',
+    monitoramento.iluminacao AS 'Valor LX'
+FROM monitoramento
+JOIN sensorLDR ON monitoramento.fkSensor = sensorLDR.idSensor
+JOIN areaCultivo ON sensorLDR.fkCultivo = areaCultivo.idCultivo
+JOIN usuario ON areaCultivo.fkUsuario = usuario.idUsuario
+JOIN usuario AS supervisor ON supervisor.idUsuario = usuario.fkSupervisor
+JOIN empresa ON usuario.Empresa_idEmpresa = empresa.idEmpresa
+where date (monitoramento.dtRegistro) = '2025-04-18';
+
+-- Exibir Nome Empresa, Supervisor, Funcionário Responsável, Identificação do Cultivo, Quantidade de ostras, Identificação do Sensor, Data do Registro e valor LX.
+-- Empresa com id=1, com o valor da iluminação >200 e id do sensor = 1
+select empresa.nomeFantasia AS 'Nome Empresa',
+		supervisor.nome AS 'Supervisor',
+        usuario.nome as 'Responsável',
+        areaCultivo.idCultivo as 'Identificação do Cultivo',
+        areaCultivo.qtOstras as 'Quantidade de ostras',
+        sensorLDR.idSensor as 'Identificação do Sensor',
+		monitoramento.dtRegistro as 'Data de registro',
+        monitoramento.iluminacao as 'Valor LX'
+		from monitoramento 
+        join sensorLDR on monitoramento.fkSensor = sensorLDR.idSensor
+        join areaCultivo on sensorLDR.fkCultivo = areaCultivo.idCultivo
+        join usuario on areaCultivo.fkUsuario = usuario.idUsuario
+        join usuario as supervisor on supervisor.idUsuario= usuario.fkSupervisor
+        join empresa on usuario.Empresa_idEmpresa = empresa.idEmpresa
+        where date (monitoramento.dtRegistro)= '2025-04-24' and empresa.idEmpresa =1 and monitoramento.iluminacao > 200 and sensorLDR.idSensor = 1;
+
+-- Exibir nome da empresa, Funcionário Responsável, Identificação do cultivo, Status da manutenção, Data da manutenção, Data próxima Manutenção
+-- Onde o status seja ativo na empresa de id 3.
+
+select 
+empresa.nomeFantasia as 'Nome empresa',
+usuario.nome as 'Funcionário responsável',
+areaCultivo.idCultivo as 'Identificação cultivo',
+sensorLDR.statusManutencao as 'Status manutenção',
+sensorLDR.dtManutencao as 'Data da manutenção',
+sensorLDR.proximaManutencao as 'Data da próxima manutenção'
+from sensorLDR join areaCultivo on sensorLDR.fkCultivo = areaCultivo.idCultivo
+join usuario on areaCultivo.fkUsuario = usuario.idUsuario
+join empresa on usuario.Empresa_idEmpresa= empresa.idEmpresa
+where statusManutencao = 'Ativo' and idempresa = 3;
+        
+        
