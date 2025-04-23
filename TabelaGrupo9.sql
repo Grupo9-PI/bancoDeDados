@@ -1,25 +1,39 @@
-create database Grupo9PI;
-use Grupo9PI;
+create database lumaris;
+use lumaris;
 
 CREATE TABLE empresa(
-idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
-razaoSocial VARCHAR(50) NOT NULL,
-nomeFantasia VARCHAR(50) NOT NULL,
-cnpj CHAR(14) NOT NULL,
-dtCadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
-email VARCHAR(100) NOT NULL,
-CONSTRAINT checkEmail check(email LIKE '%@%'),
-senha VARCHAR(100) NOT NULL,
-celular VARCHAR (11) NOT NULL,
-telefone VARCHAR(10) NOT NULL,
-logradouro VARCHAR(100)
+	idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
+	razaoSocial VARCHAR(50) NOT NULL,
+	nomeFantasia VARCHAR(50) NOT NULL,
+	cnpj CHAR(14) NOT NULL,
+	dtCadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
+	email VARCHAR(100) NOT NULL,
+	CONSTRAINT checkEmail check(email LIKE '%@%'),
+	senha VARCHAR(100) NOT NULL,
+	celular VARCHAR (11) NOT NULL,
+	telefone VARCHAR(10) NOT NULL
 );
 
-INSERT INTO empresa (razaoSocial, nomeFantasia, cnpj, dtCadastro, email, senha, celular, telefone, logradouro)
+INSERT INTO empresa (razaoSocial, nomeFantasia, cnpj, dtCadastro, email, senha, celular, telefone)
 VALUES
-('Ostra Dourada Ltda', 'Ostra Dourada', '12345678000190', '2025-03-01', 'contato.ostradourada@email.com','senha123','11988887777', '1133445566' , 'Rua santo antonio, 265, Vila Ipiranga, São Paulo, SP'),
-('Perolas do Pacifico SA','Perolas do Pacifico', '12345678000190', '2025-02-15', 'vendasperolaspacifico@email.com', 'perolapacifico2025', '11988884698', '1133449988', 'Rua patricio, 874,Jardim Vitória, Belo Horizonte, MG'),
-('Mare Branca Cultivo Ltda', 'Mare Branca Cultivo', '23456789000101', '2025-01-30', 'sacmarebranca@email.com', 'perolapacifico2025', '11965432109', '1135435588', 'Alameda Afonso Smthit, 1000, Santa cruz, São Paulo,SP');
+('Ostra Dourada Ltda', 'Ostra Dourada', '12345678000190', '2025-03-01', 'contato.ostradourada@email.com','senha123','11988887777', '1133445566'),
+('Perolas do Pacifico SA','Perolas do Pacifico', '12345678000190', '2025-02-15', 'vendasperolaspacifico@email.com', 'perolapacifico2025', '11988884698', '1133449988'),
+('Mare Branca Cultivo Ltda', 'Mare Branca Cultivo', '23456789000101', '2025-01-30', 'sacmarebranca@email.com', 'perolapacifico2025', '11965432109', '1135435588');
+
+create table endereco (
+    idEndereco int primary key auto_increment,
+    rua varchar(50),
+    numero varchar(10),
+    bairro varchar(100),
+    cidade varchar(100),
+    estado char(2),
+	fkEmpresa int,
+		constraint fkEmpresaEndereco foreign key (fkEmpresa) references empresa(idEmpresa));
+        
+insert into endereco (rua, numero, bairro, cidade, estado, fkEmpresa) values
+	('Rua santo antonio', '265', 'Vila Ipiranga', 'São Paulo', 'SP', 1),
+	('Rua patricio', '874', 'Jardim Vitória', 'Belo Horizonte', 'MG', 2),
+	('Alameda Afonso Smthit', '1000', 'Santa cruz', 'São Paulo', 'SP', 3);        
 
 
 create table usuario(
@@ -76,6 +90,7 @@ insert into areaCultivo(qtOstras, dtinstalacao, fkUsuario) values
 ('280', '2018-10-01', 9),
 ('500', '2025-01-01', 9);
 
+
 CREATE TABLE sensorLDR(
 idSensor INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 numSerie VARCHAR(100) UNIQUE NOT NULL,
@@ -89,6 +104,8 @@ constraint fkCultivoSensor
 	foreign key (fkCultivo)
     references areaCultivo (idCultivo)
 );
+
+select * from sensorLDR;
 
 INSERT INTO sensorLDR (numSerie, dtFabricacao, dtCompra, dtManutencao, statusManutencao, fkCultivo)
 VALUES
@@ -105,15 +122,14 @@ VALUES
 ('YUI5623ZXCV', '2023-10-25', '2024-08-15', '2024-04-25', 'Ativo', 11),
 ('BNM2398VFRD', '2024-02-02', '2024-06-30', '2024-08-02', 'Inativo', 12);
 
+
 CREATE TABLE monitoramento(
     idSensorMonitoramento INT primary key auto_increment NOT NULL ,
 	dtRegistro DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    iluminacao FLOAT NOT NULL,
+    iluminacao int NOT NULL,
     fkSensor int,
     constraint fkSensorMonitoramento
-    foreign key (fkSensor)
-		references SensorLDR (idSensor)
-        );
+    foreign key (fkSensor) references sensorLDR (idSensor));
     
 INSERT INTO monitoramento (dtRegistro, iluminacao,fkSensor) VALUES
 ('2025-04-18 06:00:00', 240, 1),
@@ -190,6 +206,7 @@ update sensorLDR set proximaManutencao = null where idSensor= 5;
 update sensorLDR set proximaManutencao = '2025-08-01' where idSensor in (6,7,8,9,10,11,12);
 
 select *from empresa;
+select * from endereco;
 select *from usuario;
 select *from areaCultivo;
 select *from monitoramento;
@@ -246,5 +263,3 @@ from sensorLDR join areaCultivo on sensorLDR.fkCultivo = areaCultivo.idCultivo
 join usuario on areaCultivo.fkUsuario = usuario.idUsuario
 join empresa on usuario.Empresa_idEmpresa= empresa.idEmpresa
 where statusManutencao = 'Ativo' and idempresa = 3;
-        
-        
