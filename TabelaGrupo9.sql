@@ -155,8 +155,7 @@ select *from sensorLDR;
 -- Exibir Nome Empresa, Supervisor, Funcionário Responsável, Identificação do Cultivo, Quantidade de ostras, Identificação do Sensor, Data do Registro e valor LX.
 
 select e.nomeFantasia as 'Nome da Empresa',
-	su.nome as 'Supervisor',
-    u.nome as 'Funcionários',
+	u.nome as 'Supervisor',
     a.idCultivo as 'Identificação do Cultivo',
     a.qtOstras as 'Quantidade de ostras',
     s.idSensor as 'identificação do Sensor',
@@ -167,37 +166,5 @@ from monitoramento m
     join areaCultivo a on s.fkCultivo = a.idCultivo
     join empresa e on a.fkEmpresa = e.idEmpresa
     join usuario u on e.idEmpresa = u.fkEmpresa
-    join usuario su on u.fkSupervisor = su.idUsuario;
+    where fkSupervisor is null;
 
--- Exibir Nome Empresa, Supervisor, Funcionário Responsável, Identificação do Cultivo, Quantidade de ostras, Identificação do Sensor, Data do Registro e valor LX.
--- Empresa com id=1, com o valor da iluminação >200 e id do sensor = 1
-select empresa.nomeFantasia AS 'Nome Empresa',
-		supervisor.nome AS 'Supervisor',
-        usuario.nome as 'Responsável',
-        areaCultivo.idCultivo as 'Identificação do Cultivo',
-        areaCultivo.qtOstras as 'Quantidade de ostras',
-        sensorLDR.idSensor as 'Identificação do Sensor',
-		monitoramento.dtRegistro as 'Data de registro',
-        monitoramento.iluminacao as 'Valor LX'
-		from monitoramento 
-        join sensorLDR on monitoramento.fkSensor = sensorLDR.idSensor
-        join areaCultivo on sensorLDR.fkCultivo = areaCultivo.idCultivo
-        join usuario on areaCultivo.fkUsuario = usuario.idUsuario
-        join usuario as supervisor on supervisor.idUsuario= usuario.fkSupervisor
-        join empresa on usuario.Empresa_idEmpresa = empresa.idEmpresa
-        where date (monitoramento.dtRegistro)= '2025-04-24' and empresa.idEmpresa =1 and monitoramento.iluminacao > 200 and sensorLDR.idSensor = 1;
-
--- Exibir nome da empresa, Funcionário Responsável, Identificação do cultivo, Status da manutenção, Data da manutenção, Data próxima Manutenção
--- Onde o status seja ativo na empresa de id 3.
-
-select 
-empresa.nomeFantasia as 'Nome empresa',
-usuario.nome as 'Funcionário responsável',
-areaCultivo.idCultivo as 'Identificação cultivo',
-sensorLDR.statusManutencao as 'Status manutenção',
-sensorLDR.dtManutencao as 'Data da manutenção',
-sensorLDR.proximaManutencao as 'Data da próxima manutenção'
-from sensorLDR join areaCultivo on sensorLDR.fkCultivo = areaCultivo.idCultivo
-join usuario on areaCultivo.fkUsuario = usuario.idUsuario
-join empresa on usuario.Empresa_idEmpresa= empresa.idEmpresa
-where statusManutencao = 'Ativo' and idempresa = 3;
