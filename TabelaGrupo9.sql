@@ -37,24 +37,22 @@ insert into endereco (rua, numero, bairro, cidade, estado, fkEmpresa) values
 
 
 create table usuario(
-	idUsuario int auto_increment,
-    Empresa_idEmpresa int, 
+	idUsuario int primary key auto_increment,
+    fkEmpresa int, 
     nome varchar(45),
     email varchar(45),
-    CONSTRAINT checkEmailUsuario check(email LIKE '%@%'),
+		CONSTRAINT checkEmailUsuario check(email LIKE '%@%'),
     telefone VARCHAR (10),
     celular varchar (11),
     statusUsuario varchar (45) DEFAULT 'Ativo' NOT NULL,
     CONSTRAINT checkUsuario CHECK(statusUsuario IN("Ativo","Afastado","Ferias")),
     senha varchar(45),
-	primary key (idUsuario,Empresa_idEmpresa),
 	fkSupervisor int,
-	constraint fkSupervisorUsuario 
-        foreign key(fkSupervisor) 
-        references usuario(idUsuario)
+		constraint fkSupervisorUsuario foreign key(fkSupervisor) references usuario(idUsuario),
+        constraint fkUsuarioEmpresa foreign key(fkEmpresa) references empresa(idEmpresa)
     ); 
     
-insert into usuario (idUsuario, Empresa_idEmpresa, nome, email, telefone, celular, statusUsuario, senha, fkSupervisor) values
+insert into usuario (idUsuario, fkEmpresa, nome, email, telefone, celular, statusUsuario, senha, fkSupervisor) values
 	(null ,'1','Gustavo Frieng', 'gustavo.frieng@email.com', '1123456789', '11987654321','Ativo','PollosHermanos290!', null),
     (null,'1','Cleber Junior', 'junior.cleb@email.com', '1134567890','11991234567', 'Ferias', 'MousseDeMaracuja1919#', 1),
     (null,'1','Sandra Regina', 'sandra.san80@email.com', '1134567890', '1138765432', 'Ativo', 'M3j3u31980!',  1),
@@ -68,27 +66,27 @@ insert into usuario (idUsuario, Empresa_idEmpresa, nome, email, telefone, celula
 
 CREATE TABLE areaCultivo(
 idCultivo INT PRIMARY KEY auto_increment NOT NULL,
-qtOstras decimal (5,0),
+qtOstras int,
 dtinstalacao date,
-fkUsuario int,
-constraint fkUsuarioCultivo
-	foreign key (fkUsuario)
-    references usuario(idusuario)
+fkEmpresa int,
+constraint fkEmpresaArea
+	foreign key (fkEmpresa)
+    references empresa(idEmpresa)
     );
     
-insert into areaCultivo(qtOstras, dtinstalacao, fkUsuario) values
-('250', '2024-11-01', '3'),
-('300', '2024-12-01', 3),
-('280', '2024-10-01', 3),
-('400', '2025-03-05', 3),
-('590', '2025-03-05', 3),
-('610', '2022-11-01', 5),
-('402', '2022-11-01', 5),
-('200', '2018-01-01', 9),
-('500', '2018-04-01', 9),
-('300', '2018-05-01', 9),
-('280', '2018-10-01', 9),
-('500', '2025-01-01', 9);
+insert into areaCultivo(qtOstras, dtinstalacao, fkEmpresa) values
+('250', '2024-11-01', 1),
+('300', '2024-12-01', 1),
+('280', '2024-10-01', 2),
+('400', '2025-03-05', 1),
+('590', '2025-03-05', 1),
+('610', '2022-11-01', 3),
+('402', '2022-11-01', 1),
+('200', '2018-01-01', 2),
+('500', '2018-04-01', 3),
+('300', '2018-05-01', 3),
+('280', '2018-10-01', 1),
+('500', '2025-01-01', 1);
 
 
 CREATE TABLE sensorLDR(
@@ -131,67 +129,8 @@ CREATE TABLE monitoramento(
     constraint fkSensorMonitoramento
     foreign key (fkSensor) references sensorLDR (idSensor));
     
-INSERT INTO monitoramento (dtRegistro, iluminacao,fkSensor) VALUES
-('2025-04-18 06:00:00', 240, 1),
-('2025-04-18 07:00:00', 320, 1),
-('2025-04-18 08:00:00', 450, 1),
-('2025-04-18 09:00:00', 600, 1),
-('2025-04-18 10:00:00', 720, 1),
-('2025-04-18 11:00:00', 850, 2),
-('2025-04-18 12:00:00', 1020, 2),
-('2025-04-18 13:00:00', 1100, 2),
-('2025-04-18 14:00:00', 970, 2),
-('2025-04-18 15:00:00', 860, 3),
-('2025-04-18 16:00:00', 740, 4),
-('2025-04-18 17:00:00', 530, 5),
-('2025-04-18 18:00:00', 380, 6),
-('2025-04-18 19:00:00', 260, 7),
-('2025-04-18 20:00:00', 230, 8),
-('2025-04-18 21:00:00', 210, 9),
-('2025-04-18 22:00:00', 200, 10),
-('2025-04-18 23:00:00', 215, 11),
-('2025-04-19 00:00:00', 220, 12);
 
-insert into monitoramento (dtRegistro, iluminacao, fkSensor) values 
-('2025-04-24 00:00:00','2', 1),
-('2025-04-24 01:00:00','3', 1),
-('2025-04-24 02:00:00','2', 1),
-('2025-04-24 03:00:00','1', 1),
-('2025-04-24 04:00:00','1', 1),
-('2025-04-24 05:00:00','50', 1),
-('2025-04-24 05:30:00','100', 1),
-('2025-04-24 06:00:00','200', 1),
-('2025-04-24 06:30:00','250', 1),
-('2025-04-24 07:00:00','300', 1),
-('2025-04-24 07:30:00','350', 1),
-('2025-04-24 08:00:00','400', 1),
-('2025-04-24 08:30:00','550', 1),
-('2025-04-24 09:00:00','680', 1),
-('2025-04-24 09:30:00','700', 1),
-('2025-04-24 10:00:00','750', 1),
-('2025-04-24 10:30:00','800', 1),
-('2025-04-24 11:00:00','850', 1),
-('2025-04-24 11:30:00','910', 1),
-('2025-04-24 12:00:00','1000', 1),
-('2025-04-24 12:30:00','1090', 1),
-('2025-04-24 13:00:00','1120', 1),
-('2025-04-24 13:30:00','1080', 1),
-('2025-04-24 14:00:00','970', 1),
-('2025-04-24 14:30:00','900', 1),
-('2025-04-24 15:00:00','870', 1),
-('2025-04-24 15:30:00','800', 1),
-('2025-04-24 16:00:00','750', 1),
-('2025-04-24 16:30:00','620', 1),
-('2025-04-24 17:00:00','550', 1),
-('2025-04-24 17:30:00','400', 1),
-('2025-04-24 18:00:00','320', 1),
-('2025-04-24 18:30:00','280', 1),
-('2025-04-24 19:00:00','200', 1),
-('2025-04-24 19:30:00','50', 1),
-('2025-04-24 20:00:00','6', 1),
-('2025-04-24 21:00:00','5', 1),
-('2025-04-24 22:00:00','3', 1),
-('2025-04-24 23:00:00','2', 1);
+
 
 alter table sensorLDR add column proximaManutencao date;
 select * from sensorLDR;
@@ -214,22 +153,21 @@ select *from sensorLDR;
 
 
 -- Exibir Nome Empresa, Supervisor, Funcionário Responsável, Identificação do Cultivo, Quantidade de ostras, Identificação do Sensor, Data do Registro e valor LX.
-SELECT 
-    empresa.nomeFantasia AS 'Nome Empresa',
-    supervisor.nome AS 'Supervisor',
-    usuario.nome AS 'Funcionário Responsável',
-    areaCultivo.idCultivo AS 'Identificação do Cultivo',
-    areaCultivo.qtOstras AS 'Quantidade de ostras',
-    sensorLDR.idSensor AS 'Identificação do Sensor',
-    monitoramento.dtRegistro AS 'Data de registro',
-    monitoramento.iluminacao AS 'Valor LX'
-FROM monitoramento
-JOIN sensorLDR ON monitoramento.fkSensor = sensorLDR.idSensor
-JOIN areaCultivo ON sensorLDR.fkCultivo = areaCultivo.idCultivo
-JOIN usuario ON areaCultivo.fkUsuario = usuario.idUsuario
-JOIN usuario AS supervisor ON supervisor.idUsuario = usuario.fkSupervisor
-JOIN empresa ON usuario.Empresa_idEmpresa = empresa.idEmpresa
-where date (monitoramento.dtRegistro) = '2025-04-18';
+
+select e.nomeFantasia as 'Nome da Empresa',
+	su.nome as 'Supervisor',
+    u.nome as 'Funcionários',
+    a.idCultivo as 'Identificação do Cultivo',
+    a.qtOstras as 'Quantidade de ostras',
+    s.idSensor as 'identificação do Sensor',
+    m.dtRegistro as 'Data de registro',
+    m.iluminacao as 'Valor LX'
+from monitoramento m
+	join sensorLDR s on m.fkSensor = s.idSensor
+    join areaCultivo a on s.fkCultivo = a.idCultivo
+    join empresa e on a.fkEmpresa = e.idEmpresa
+    join usuario u on e.idEmpresa = u.fkEmpresa
+    join usuario su on u.fkSupervisor = su.idUsuario;
 
 -- Exibir Nome Empresa, Supervisor, Funcionário Responsável, Identificação do Cultivo, Quantidade de ostras, Identificação do Sensor, Data do Registro e valor LX.
 -- Empresa com id=1, com o valor da iluminação >200 e id do sensor = 1
